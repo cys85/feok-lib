@@ -1,13 +1,22 @@
 {
-  "name": "q",
-  "version": "2.0.0-alpha.25",
-  "private": true,
+  "name": "feok-lib",
+  "version": "1.0.0",
+  "main": "src/main.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/cys85/feok-lib.git"
+  },
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --modern",
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit"
   },
+  "keywords": [
+    "vue",
+    "feok-lib",
+    "components"
+  ],
   "dependencies": {
     "@types/echarts": "0.0.13",
     "@types/lodash": "^4.14.111",
