@@ -1,14 +1,14 @@
 {
   "name": "feok-lib",
-  "version": "1.0.0",
-  "main": "src/main.ts",
+  "version": "1.0.1",
+  "main": "dist/feok-lib.common.js",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/cys85/feok-lib.git"
   },
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build --modern",
+    "build": "vue-cli-service build --target lib src/main.ts",
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit"
   },
