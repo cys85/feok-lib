@@ -15,7 +15,7 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 
 @Component
-export default class BaseFile extends Vue {
+export default class DownFile extends Vue {
   @Prop() public fileName!: string;
   @Prop() public url!: string;
 }

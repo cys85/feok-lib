@@ -21,7 +21,7 @@
               :maxlength="maxlength"
               @keyup.native.enter="handleSave" />
             <!-- 状态切换 -->
-            <BaseLoading
+            <EditInput
               class="base-edit-input__loading"
               v-if="loading"
               :fix="false"
@@ -58,13 +58,13 @@
  */
 import {Vue, Component, Prop, Emit, Watch } from 'vue-property-decorator';
 import Schema from 'async-validator';
-import BaseLoading from '@/components/BaseLoading.vue';
+import Loading from './Loading.vue';
 @Component({
   components: {
-    BaseLoading,
+    Loading,
   },
 })
-export default class BaseEditInput extends Vue {
+export default class EditInput extends Vue {
   @Prop({type: [String, Number]}) public value!: string|number;
   @Prop({default: () => []}) public rules!: any [];
   @Prop({default: 100}) public width!: number;

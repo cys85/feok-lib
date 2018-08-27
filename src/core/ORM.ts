@@ -1,15 +1,9 @@
 import { isObject, compilePath, replaceNullOrUndefined } from './utils';
 import Fetch from './Fetch';
+import { FeokLib } from '../typings';
 // import {compilePath} from '@/utils/assist'
-interface ORMInterface {
-  get(): any; // get method of ajax
-  post(): any; // post method of ajax
-  delete(): any; // delete method of ajax
-  patch(): any; // patch method of ajax
-  put(): any; // put method of ajax
-}
 
-class ORM implements ORMInterface {
+class ORM implements FeokLib.ORMInterface {
   public get: any;
   public post: any;
   public delete: any;

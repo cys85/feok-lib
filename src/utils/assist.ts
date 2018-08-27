@@ -1,6 +1,4 @@
-import pathToRegexp from 'path-to-regexp';
 import dayjs from 'dayjs';
-import { Vue } from 'vue/types/vue';
 
 /**
  * 查找父组件
@@ -246,7 +244,7 @@ export function firstLetterToUpperCase(str: string) {
  */
 export function formatDate(
   date: string = '',
-  pattern: string = process.env.DATE_PATTERN as string,
+  pattern: string = 'YYYY-MM-DD',
 ) {
   if (!date) {
     return '';
@@ -289,14 +287,6 @@ export const jsonTree: JsonTree = (
   return treeData;
 };
 
-export const getEnums: any = (key: any) => {
-  const o = require('@/locale/lang/zh-CN').default;
-  return Object.keys(o[key] || {}).map((item) => ({
-    value: item,
-    label: o[key][item],
-  }));
-};
-
 /**
  * 数组引用转对象引用
  */
@@ -306,39 +296,4 @@ export function arrayTransformObject(mapKey: string, data: any[]) {
     o[item[mapKey]] = item;
   });
   return o;
-}
-
-/**
- * 列表按钮权限
- * @param {object} btnMap 权限清单
- * @param {string} btnKey 按钮key
- * @param {string} value 判定值
- *
- * @example
- *
- * btnMap: {edit_plan: {name: "修改生产计划", key: "edit_plan", status: ["INVALID"]}, delete_plan: {name: "删除生产计划", key: "delete_plan", status: ["INVALID"]}}
- * btnKey: edit_plan
- * value: 'INVALID'
- * return true
- */
-export function btnPermission(btnMap: any, btnKey: any, value: any) {
-  return btnMap[btnKey] ? btnMap[btnKey].status.includes(value) : false;
-}
-
-/**
- * // 利用车间班组对象数组，取出班组和班组负责人名称，转成字符串放在一个对象里return出去
- * @param {object[]} arr 车间班组
- */
-export function workshopFormat(array: object[]) {
-  const array1 = array.map((item: any) => {
-    return item.leader_obj.name;
-  });
-  const array2 = array.map((item: any) => {
-    return item.name;
-  });
-  const obj = {
-    leader_obj_name: array1.join(','),
-    workshop_group_name: array2.join(','),
-  };
-  return obj;
 }

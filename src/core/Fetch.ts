@@ -1,5 +1,5 @@
 import ajaxDebounceCreator from './ajaxDebounce';
-import storage from '@/lib/store2';
+import storage from '../lib/store2';
 
 import axios, {
   AxiosInstance,

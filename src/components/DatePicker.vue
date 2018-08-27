@@ -35,7 +35,7 @@ import { Vue, Component, Prop, Watch, Emit } from 'vue-property-decorator';
 import dayjs from 'dayjs';
 
 @Component
-export default class TheDatePicker extends Vue {
+export default class DatePicker extends Vue {
   @Prop({ type: Array }) public defaultVal!: string[];
   @Prop({ type: Array, default() { return ['00:00:00', '23:59:59']; }}) public defaulTime!: string[];
   @Prop({ type: String, default: 'left' }) public align!: string;
