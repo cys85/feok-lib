@@ -69,5 +69,5 @@ export {
   PictureView,
   SelectPanel,
   TheBreadcrumb,
-  TheMenu, ;
+  TheMenu,
 };

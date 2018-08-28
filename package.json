@@ -1,7 +1,6 @@
 {
   "name": "feok-lib",
-  "version": "1.0.4",
-  "main": "dist/feok-lib.common.js",
+  "version": "1.0.6",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/cys85/feok-lib.git"
