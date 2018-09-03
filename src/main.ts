@@ -38,7 +38,7 @@ import {
   firstLetterToUpperCase,
   formatDate,
   arrayTransformObject,
-} from '@/utils/assist';
+} from './utils/assist';
 
 export {
   ORM,

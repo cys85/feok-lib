@@ -62,7 +62,7 @@
 <script lang="ts">
 // 弹出框
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
-import EventBus from '@/core/event-bus';
+import EventBus from '../core/event-bus';
 
 @Component
 export default class ContentModal extends Vue {
