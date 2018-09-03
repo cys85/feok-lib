@@ -17,6 +17,10 @@ import PictureView from './components/PictureView.vue'; //
 import SelectPanel from './components/SelectPanel.vue'; //
 import TheBreadcrumb from './components/TheBreadcrumb.vue'; //
 import TheMenu from './components/TheMenu.vue'; //
+import FileUpload from './components/FileUpload.vue'; //
+import PictureUpload from './components/PictureUpload.vue'; //
+
+import {MixContentModal} from './components/mix/MixContentModal';
 
 import {
   jsonTree,
@@ -54,8 +58,8 @@ export {
   deepClone,
   firstLetterToUpperCase,
   formatDate,
-  arrayTransformObject,
   ContentModal,
+  MixContentModal,
   CollectText,
   BrowserInfo,
   DatePicker,
@@ -70,4 +74,6 @@ export {
   SelectPanel,
   TheBreadcrumb,
   TheMenu,
+  FileUpload,
+  PictureUpload,
 };
