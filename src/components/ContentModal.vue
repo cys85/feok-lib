@@ -117,7 +117,7 @@ export default class ContentModal extends Vue {
       document.documentElement.style.overflow = document.body.style.overflow = 'hidden';
     } else {
       EventBus.$emit ('bodyOverflowAuto');
-      document.documentElement.style.overflow = document.body.style.overflow = null;
+      document.documentElement.style.overflow = document.body.style.overflow = 'visible';
     }
   }
 
@@ -168,7 +168,7 @@ export default class ContentModal extends Vue {
     if (this.transfer) {
       window.removeEventListener('resize', this.resizePosition);
       EventBus.$emit ('bodyOverflowAuto');
-      document.documentElement.style.overflow = document.body.style.overflow = null;
+      document.documentElement.style.overflow = document.body.style.overflow = 'null';
     }
   }
 

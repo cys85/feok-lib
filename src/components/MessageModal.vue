@@ -86,7 +86,7 @@ export default class Messagemodal extends Vue {
     if (val) {
       document.documentElement.style.overflow = document.body.style.overflow = 'hidden';
     } else {
-      document.documentElement.style.overflow = document.body.style.overflow = null;
+      document.documentElement.style.overflow = document.body.style.overflow = 'visible';
     }
   }
   // 关闭
