@@ -1,7 +1,7 @@
 import { isObject, compilePath, replaceNullOrUndefined } from './utils';
 import Fetch from './Fetch';
 import { FeokLib } from '../typings';
-// import {compilePath} from '@/utils/assist'
+import { AxiosRequestConfig } from 'axios';
 
 class ORM implements FeokLib.ORMInterface {
   public get: any;
@@ -11,14 +11,23 @@ class ORM implements FeokLib.ORMInterface {
   public put: any;
   private module: any;
   private plugins: any;
-  constructor({
-    ajaxBaseUrl = '',
-    ajaxTimeout = 3000,
-    tokenCache = 'session',
-  }) {
+  constructor(
+    {
+      ajaxBaseUrl = '',
+      ajaxTimeout = 3000,
+      tokenCache = 'session',
+      requestHook = null,
+    }: {
+      ajaxBaseUrl?: string,
+      ajaxTimeout?: number,
+      tokenCache?: string,
+      requestHook?: AxiosRequestConfig | any,
+    },
+    options?: any,
+  ) {
     this.module = {};
     this.plugins = [];
-    const fetch = new Fetch({ ajaxBaseUrl, ajaxTimeout, tokenCache });
+    const fetch = new Fetch({ ajaxBaseUrl, ajaxTimeout, tokenCache, requestHook }, options);
     this.get = this._ajax('get', fetch)();
     this.post = this._ajax('post', fetch)();
     this.delete = this._ajax('delete', fetch)();

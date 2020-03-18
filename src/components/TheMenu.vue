@@ -26,7 +26,7 @@
           </el-menu-item>
         </template>
       </el-submenu>
-      <el-menu-item v-else :key="item1.id">
+      <el-menu-item v-else :key="item1.id" :index="item1.path || item1.id">
         <i class="iconfont" :class="item1.icon" />
         <span slot="title">{{item1.name}}</span>
       </el-menu-item>

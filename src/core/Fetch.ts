@@ -13,6 +13,7 @@ import axios, {
 interface FetchCreatorInterface {
   CancelToken: any;
   isCancel: any;
+  requestHook: any;
   get(url: string, data: any, options: object): any;
   post(url: string, data: any, options: object): any;
   put(url: string, data: any, options: object): any;
@@ -23,6 +24,7 @@ interface FetchCreatorInterface {
 class FetchCreator implements FetchCreatorInterface {
   public CancelToken: any;
   public isCancel: any;
+  public requestHook: any;
   private ajaxConfig: {
     baseURL: string;
     timeout: number;
@@ -30,15 +32,20 @@ class FetchCreator implements FetchCreatorInterface {
   private axios: any;
   private fetch: any;
   private tokenCache: string; // token缓存方式
-  constructor({
+  constructor(
+    {
     ajaxBaseUrl = '',
     ajaxTimeout = 3000,
     tokenCache = 'session',
-  }) {
+    requestHook = null,
+    },
+    options = {},
+  ) {
     // init config
     this.ajaxConfig = {
       baseURL: ajaxBaseUrl,
       timeout: ajaxTimeout,
+      ...options,
     };
     // init create axios
     this.CancelToken = axios.CancelToken;
@@ -47,6 +54,7 @@ class FetchCreator implements FetchCreatorInterface {
     this.axios = axios.create(this.ajaxConfig);
     this.axios.isCancel = axios.isCancel;
     this.axios.CancelToken = axios.CancelToken;
+    this.requestHook = requestHook;
     this._initAxiosInterceptors(); // init axios Interceptors
     this.fetch = ajaxDebounceCreator(this.axios);
   }
@@ -68,7 +76,7 @@ class FetchCreator implements FetchCreatorInterface {
 
   private _initAxiosInterceptors() {
     this.axios.interceptors.request.use(
-      (config: AxiosRequestConfig): AxiosRequestConfig => {
+      this.requestHook || ((config: AxiosRequestConfig): AxiosRequestConfig => {
         let token;
         switch (this.tokenCache) {
           case 'local':
@@ -82,7 +90,7 @@ class FetchCreator implements FetchCreatorInterface {
           config.headers.token = token;
         }
         return config;
-      },
+      }),
       (error: AxiosError): AxiosPromise => {
         // Do something with request error
         console.log(error); // for debug

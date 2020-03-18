@@ -1,21 +1,3 @@
-/**
- * 弹出层组件（基础组件）-leo
- *
- * @param {boolean} value - 显示/隐藏
- * @param {string} title - 标题
- * @param {number} maxHeight - 最大高度：20
- * @param {string} height - 高度
- * @param {boolean} closeDestroy - 是否销毁
- * @param {boolean} loading - 是否在loading
- * @param {boolean} border - 内容区是否在有边框
- * @param {boolean} transfer - 是否在flexed定位
- * @param {boolean} border - okText
- * @param {boolean} transfer - cancelText
- *
- * @event click-modal-backdrop - 关闭
- * @event cencel - 取消
- * @event visible-change - 状态发生变化
- */
 <template>
   <section
     class="content-modal"
@@ -31,28 +13,29 @@
     <transition name="content-modal">
       <div class="content-modal__win-wrap re-md-sm-padding" v-if="!closeDestroy || modal" v-show="modal">
         <div class="content-modal__win">
-          <header>
-            <span class="content-modal__header-title"><slot name="title">{{title}}</slot></span>
-            <div class="content-modal__header-extend"><slot name="header"></slot></div>
-            <span class="content-modal__header-close" @click="onCancel"><slot name="close"><i class="iconfont icon-close"></i></slot></span>
-          </header>
-          <section
-            ref="content-modal__body"
-            class="content-modal__body"
-            :class="{
-              'content-modal__border': border
-            }"
-            >
-            <slot></slot>
-          </section>
-          <section  class="content-modal__footer">
-            <slot name="footer">
-              <el-button :loading="buttonLoading" type="primary" class="content-modal__footer__btn" @click="onOk">{{okText}}</el-button> 
-              <el-button class="content-modal__footer__btn" @click="onCancel">{{cancelText}}</el-button> 
-              <!-- <Button :loading="buttonLoading" class="content-modal__footer__btn" @click="onOk"  type="success"></Button>
-              <Button class="content-modal__footer__btn" @click="onCancel" type="ghost">{{cancelText}}</Button> -->
-            </slot>
-          </section>
+          <span class="content-modal__header-close" @click="onCancel"><slot name="close"><i class="iconfont icon-close"></i></slot></span>
+          <template v-if="!hasCustom"> 
+            <div class="content-modal__header-wrap re-md-sm-margin-bottom" v-if="hasHeader">
+              <div class="content-modal__title" :class="{'content-modal__title-border': hasTitleBorder}"><slot name="title">{{title}}</slot></div>
+              <div class="content-modal__header"><slot name="header"></slot></div>
+            </div>
+            <section
+              ref="content-modal__body"
+              class="content-modal__body"
+              :class="{
+                'content-modal__border': border
+              }"
+              >
+              <slot></slot>
+            </section>
+            <section  class="content-modal__footer re-md-sm-margin-top" v-if="hasFooter">
+              <slot name="footer">
+                <el-button size="small" :loading="buttonLoading" type="primary" class="content-modal__footer__btn" @click="onOk">{{okText}}</el-button> 
+                <el-button size="small" class="content-modal__footer__btn" @click="onCancel">{{cancelText}}</el-button> 
+              </slot>
+            </section>
+          </template>
+          <slot v-if="hasCustom" name="custom"></slot>
         </div> 
       </div>
     </transition>
@@ -60,6 +43,31 @@
 </template>
 
 <script lang="ts">
+/**
+ * @description ContentModal 弹出层组件（基础组件）
+ * @author leo
+ *
+ * @param {boolean} value - 显示/隐藏状态
+ * @param {string} title - 标题
+ * @param {boolean} closeDestroy - 关闭是否销毁modal组件 -默认值：true
+ * @param {boolean} loading - 按钮loading状态 -默认值：false
+ * @param {boolean} border - 内容区边框  -默认值：false
+ * @param {boolean} transfer - flexed定位 -默认值：true
+ * @param {boolean} border - okText
+ * @param {boolean} transfer - cancelText
+ *
+ * @event click-modal-backdrop - 遮罩层点击关闭事件
+ * @event ok - 确定事件
+ * @event cencel - 取消事件
+ * @event visible-change - modal变量状态改变事件
+ *
+ * @slot close      - 关闭按钮插槽
+ * @slot title      - title插槽
+ * @slot header     - title右侧插槽
+ * @slot custom     - 自定义布局组件插槽
+ * @slot footer     - 底部按钮插槽
+ */
+
 // 弹出框
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import EventBus from '../core/event-bus';
@@ -108,6 +116,19 @@ export default class ContentModal extends Vue {
     this.buttonLoading = newVal;
   }
 
+  get hasHeader() {
+    return this.title || this.$slots.title || this.$slots.header;
+  }
+  get hasTitleBorder() {
+    return this.$slots.header;
+  }
+  get hasFooter() {
+    return this.$slots.footer || this.$listeners.ok;
+  }
+  get hasCustom() {
+    return this.$slots.custom;
+  }
+
   /**
    * 切换body隐藏/显示
    */
@@ -120,9 +141,13 @@ export default class ContentModal extends Vue {
       document.documentElement.style.overflow = document.body.style.overflow = 'visible';
     }
   }
-
+  /**
+   * 遮罩层点击事件
+   */
   protected onClick() {
     this.$emit('click-modal-backdrop');
+    this.$emit('cancel');
+    this.$emit('on-cancel');
     if (!this.buttonLoading) { // button loading 时候， 不能通过点击背景关闭
       this.modal = false;
     }
@@ -132,13 +157,25 @@ export default class ContentModal extends Vue {
    */
   protected onOk() {
     this.$emit('ok');
+    this.$emit('on-done');
   }
   /**
    * 取消按钮事件
    */
   protected onCancel() {
     this.$emit('cancel');
+    this.$emit('on-cancel');
     this.modal = false; // 关闭
+  }
+  /**
+   * esc取消按钮事件
+   */
+  protected onCancel2(res: any) {
+    if (res.keyCode === 27) {
+      this.$emit('cancel');
+      this.$emit('on-cancel');
+      this.modal = false; // 关闭
+    }
   }
   /**
    * 调整位置
@@ -162,13 +199,15 @@ export default class ContentModal extends Vue {
         this.resizePosition();
       }
       window.addEventListener('resize', this.resizePosition);
+      window.addEventListener('keyup', this.onCancel2);
     }
   }
-  protected beforeDestory() {
+  protected beforeDestroy() {
     if (this.transfer) {
       window.removeEventListener('resize', this.resizePosition);
+      window.removeEventListener('keyup', this.onCancel2);
       EventBus.$emit ('bodyOverflowAuto');
-      document.documentElement.style.overflow = document.body.style.overflow = 'null';
+      document.documentElement.style.overflow = document.body.style.overflow = 'visible';
     }
   }
 
@@ -178,25 +217,45 @@ export default class ContentModal extends Vue {
 
 <style lang="less" scoped>
 .content-modal {
-  &[data-fixed=true] {
+  &[data-fixed='true'] {
     position: fixed;
-    z-index: 910
+    z-index: 910;
   }
-  header {
-    padding: 8px 0;
-    min-height: 45px;
+  .content-modal__header-wrap {
+    min-height: 40px;
+    line-height: 40px;
+    min-height: 40px;
+    padding-right: 60px;
+    overflow: hidden;
   }
-  &__header-title {
+  .content-moda__title {
     font-size: 16px;
-    color: #1c2438;
-    margin-right: 30px;
+    float: left;
   }
-  &__header-extend {
-    display: inline-block;
+  .content-moda__title-border {
+    position: relative;
+    padding-right: 60px;
+    &:after {
+      content: '';
+      position: absolute;
+      top: 8px;
+      right: 30px;
+      width: 0;
+      height: 24px;
+      border-right: 1px solid #ccc;
+    }
   }
-  .content-modal__header-close{
-    float:right;
+  .content-moda__header {
+    float: left;
+  }
+  .content-modal__header-close {
+    position: absolute;
+    top: 30px;
+    right: 35px;
     cursor: pointer;
+    &:hover {
+      color: #409eff;
+    }
   }
   &__backdrop {
     position: fixed;
@@ -206,7 +265,7 @@ export default class ContentModal extends Vue {
     left: 0;
     z-index: 9990;
     background-color: #000;
-    opacity: .1;
+    opacity: 0.1;
   }
   &__win-wrap {
     position: absolute;
@@ -220,19 +279,20 @@ export default class ContentModal extends Vue {
     display: flex;
     flex-direction: column;
   }
-  &__win{
+  &__win {
+    position: relative;
     display: flex;
     flex-direction: column;
     height: 100%;
     background: #fff;
-    border-bottom: .5px solid #c2d8f5;
-    box-shadow: 0 3px 8px rgba(0,0,0,.2);
+    border-bottom: 0.5px solid #c2d8f5;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
     background-color: white;
     padding: 20px 30px;
+    overflow: hidden;
   }
   &__body {
     flex: 1;
-    min-height: 150px;
     overflow: auto;
     &.content-modal__border {
       border: 1px solid #e9eaec;
@@ -249,27 +309,16 @@ export default class ContentModal extends Vue {
     }
   }
 }
-@media screen and (min-width: 1366px){
-  .content-modal {
-    .content-modal__win{
-      header {
-        padding: 13px 0;
-        min-height: 60px;
-      }
-    }
-    &__header-title {
-      font-size: 18px;
-      margin-right: 40px;
-    }
-  }
+@media screen and (min-width: 1366px) {
 }
 .content-modal-enter-active {
-  transition: all .15s ease;
+  transition: all 0.15s ease;
 }
 .content-modal-leave-active {
-  transition: all .15s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+  transition: all 0.15s cubic-bezier(1, 0.5, 0.8, 1);
 }
-.content-modal-enter, .content-modal-leave-to {
+.content-modal-enter,
+.content-modal-leave-to {
   transform: translateY(-20px);
   opacity: 0;
 }

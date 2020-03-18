@@ -14,13 +14,14 @@
       :action="action"
       :data="getData"
       :name="name"
+      :disabled="disabled"
+      :on-preview="handlePreview"
       drag
       multiple
       :file-list="fileList"
       :headers="headers"
       :on-success="onSuccess"
       :before-upload="beforeUpload"
-      :on-progress="uploadProcess"
       :on-exceed="onExceed"
       :on-remove="onRemove"
       :http-request="httpRequest"
@@ -33,8 +34,10 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Emit } from 'vue-property-decorator';
+import { Component, Vue, Prop, Emit, Mixins } from 'vue-property-decorator';
 import {State, namespace} from 'vuex-class';
+import mixin from './mixin';
+
 /**
  * 文件上传
  *
@@ -46,43 +49,41 @@ import {State, namespace} from 'vuex-class';
  * @param {number} maxSize - 文件上传的大小上限 单位kb
  * @param {number} limit - 最大允许上传个数
  * @param {array} fileTypes - 上传文件的类型
+ * @param {function} onPreview - 点击文件列表中已上传的文件时的钩子 function(file)
+ * @param {boolean} disabled - 是否禁用
+ * @param {function} httpRequest - 覆盖默认的上传行为，可以自定义上传的实现
  * @param {array} fileList - 上传的文件列表, 例如: [{name: 'food.jpg', url: 'https://xxx.cdn.com/xxx.jpg'}]
- *
  * @event on-success - 文件上传成功时的钩子 function(response, file, fileList)
+ * @event on-remove - 文件列表移除文件时的钩子 function(file, fileList)
  * @event on-error - 文件上传错误 function(errorType, file) errorType: typeError 类型不匹配；overSize: 超出大小上线; exceed: 超出最大个数
  */
 
 @Component
-export default class FileUpload extends Vue {
-  @Prop({default() { return []; }}) public fileList!: any[]; // 上传的文件列表, 例如: [{name: 'food.jpg', url: 'https://xxx.cdn.com/xxx.jpg'}]
-  @Prop({required: true}) public moduleName!: string; // 模块名称
-  @Prop() public action!: string; // 必选参数，上传的地址
-  @Prop({default() {
-    return {};
-  }}) public data!: object; // 上传时附带的额外参数
-  @Prop({default: 'img'}) public name!: string; // 上传的文件字段名
-  @Prop() public headers!: object; // 设置上传的请求头部
-  @Prop(Number) public limit!: number; // 最大允许上传个数
-  @Prop({
-    default: 2 * 1024, // 2MB
-  }) public maxSize!: number; // 文件上传的大小上线 单位kb
+export default class FileUpload extends Mixins(mixin) {
+  @Prop() public onPreview!: any;
   @Prop({
     default() {
       return [];
     },
-  }) public fileTypes!: any[];
-  get getData() {
-    return {
-      path: this.moduleName,
-      ...this.data,
-    };
+  })
+  public fileTypes!: any[];
+
+  public handlePreview(file: any) {
+    if (typeof this.onPreview === 'function') {
+      this.onPreview(file);
+    } else {
+      this.downLoad(file);
+    }
   }
 
-  public alertMessage = ''; // 错误信息
-  @Emit()
-  public onSuccess(response: any, file: any, fileList: any) {
+  public downLoad(file: any) {
+    const link = document.createElement('a');
+    link.target = '_blank';
+    link.href = file.url;
+    link.download = file.name;
+    const event = new MouseEvent('click');
+    link.dispatchEvent(event);
   }
-
   public beforeUpload(file: any) {
     file.percentage = 20;
     const isImg = this.fileTypes.some((item: string) => file.type === item);
@@ -106,26 +107,7 @@ export default class FileUpload extends Vue {
     this.alertMessage = '';
   }
 
-  /**
-   * 文件超出个数限制时的钩子
-   */
-  public onExceed(files: any, fileList: any) {
-    // EventBus.$emit('warning', `超出最大上传数量${this.limit}` );
-    this.alertMessage = `超出最大上传数量${this.limit}`;
-    this.$emit('on-error', 'exceed', files, fileList);
-  }
-
-  public onError(err: any, file: any, fileList: any) {
-    this.alertMessage = process.env.production ? '网络异常，请稍后再试' : err;
-    this.$emit('on-error', 'server', err, file, fileList);
-  }
-  public uploadProcess(event: any, file: any, fileList: any) {
-
-  }
 }
 
 
 </script>
-
-<style lang="less">
-</style>

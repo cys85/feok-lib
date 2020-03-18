@@ -1,18 +1,3 @@
-/**
- * 时间段选择器（基础组件）-leo
- *
- * @param {Array} defaultVal - 默认日期
- * @param {boolean} defaulTime - 默认时分秒
- * @param {string} align - 内容对其方式
- * @param {string} startPlaceholder
- * @param {string} endPlaceholder
- * @param {boolean} disabled - 是否可选
- * @param {boolean} clearable - 是否可清空
- * @param {string} format - 显示格式化
- * @param {string} type - 控件类型
- *
- * @event change - 日期发生变化
- */
 <template>
   <el-date-picker
     v-model="value"
@@ -30,6 +15,23 @@
 </template>
 
 <script lang="ts">
+/**
+ * @description DatePicker 时间段选择器（基础组件）
+ * @author leo
+ *
+ * @param {Array} defaultVal - 默认日期
+ * @param {boolean} defaulTime - 默认时分秒 -默认值：'00:00:00', '23:59:59'
+ * @param {string} align - 内容对其方式 -默认值：'left'
+ * @param {string} startPlaceholder
+ * @param {string} endPlaceholder
+ * @param {boolean} disabled - 是否可选
+ * @param {boolean} clearable - 是否可清空
+ * @param {string} format - 显示格式化 -默认值：'yyyy-MM-dd'
+ * @param {string} type - 控件类型  -默认值：'daterange'
+ *
+ * @event change - 日期发生变化
+ */
+
 // 时间段选择器
 import { Vue, Component, Prop, Watch, Emit } from 'vue-property-decorator';
 import dayjs from 'dayjs';
@@ -82,17 +84,17 @@ export default class DatePicker extends Vue {
           let starttime = '';
           let endtime = '';
           if (Month < 4) {
-            starttime = year * 1 - 1 + '-10-1 00:00:00';
-            endtime = year * 1 - 1 + '-12-31 23:59:59';
+            starttime = year * 1 - 1 + '-10-1';
+            endtime = year * 1 - 1 + '-12-31';
           } else if (Month < 7) {
-            starttime = year + '-01-1 00:00:00';
-            endtime = year + '-03-31 23:59:59';
+            starttime = year + '-01-1';
+            endtime = year + '-03-31';
           } else if (Month < 10) {
-            starttime = year + '-04-1 00:00:00';
-            endtime = year + '-06-30 23:59:59';
+            starttime = year + '-04-1';
+            endtime = year + '-06-30';
           } else {
-            starttime = year + '-07-1 00:00:00';
-            endtime = year + '-09-30 23:59:59';
+            starttime = year + '-07-1';
+            endtime = year + '-09-30';
           }
 
           start.setTime(new Date(starttime).getTime());
@@ -111,17 +113,17 @@ export default class DatePicker extends Vue {
           let starttime = '';
           let endtime = '';
           if (Month < 4) {
-            starttime = year + '-01-1 00:00:00';
-            endtime = year + '-03-31 23:59:59';
+            starttime = year + '-01-1';
+            endtime = year + '-03-31';
           } else if (Month < 7) {
-            starttime = year + '-04-1 00:00:00';
-            endtime = year + '-06-30 23:59:59';
+            starttime = year + '-04-1';
+            endtime = year + '-06-30';
           } else if (Month < 10) {
-            starttime = year + '-07-1 00:00:00';
-            endtime = year + '-09-30 23:59:59';
+            starttime = year + '-07-1';
+            endtime = year + '-09-30';
           } else {
-            starttime = year * 1 - 1 + '-10-1 00:00:00';
-            endtime = year * 1 - 1 + '-12-31 23:59:59';
+            starttime = year * 1 - 1 + '-10-1';
+            endtime = year * 1 - 1 + '-12-31';
           }
 
           start.setTime(new Date(starttime).getTime());
@@ -157,6 +159,7 @@ export default class DatePicker extends Vue {
   @Watch('format', {deep: true})
     private watchFormat(newVal: string, oldVal: string) {
       const str = (newVal === 'yyyy-MM-dd') ? 'YYYY-MM-DD' : 'YYYY-MM-DD HH:mm:ss';
+      const boo = (newVal === 'yyyy-MM-dd') ? true : false;
 
       this.pickerOptions = {
         shortcuts: [
@@ -194,17 +197,22 @@ export default class DatePicker extends Vue {
               let starttime = '';
               let endtime = '';
               if (Month < 4) {
-                starttime = year * 1 - 1 + '-10-1 00:00:00';
-                endtime = year * 1 - 1 + '-12-31 23:59:59';
+                starttime = year * 1 - 1 + '-10-1 ';
+                endtime = year * 1 - 1 + '-12-31 ';
               } else if (Month < 7) {
-                starttime = year + '-01-1 00:00:00';
-                endtime = year + '-03-31 23:59:59';
+                starttime = year + '-01-1 ';
+                endtime = year + '-03-31 ';
               } else if (Month < 10) {
-                starttime = year + '-04-1 00:00:00';
-                endtime = year + '-06-30 23:59:59';
+                starttime = year + '-04-1 ';
+                endtime = year + '-06-30 ';
               } else {
-                starttime = year + '-07-1 00:00:00';
-                endtime = year + '-09-30 23:59:59';
+                starttime = year + '-07-1 ';
+                endtime = year + '-09-30 ';
+              }
+
+              if (!boo) {
+                starttime += '00:00:00';
+                endtime += '23:59:59';
               }
 
               start.setTime(new Date(starttime).getTime());
@@ -223,17 +231,22 @@ export default class DatePicker extends Vue {
               let starttime = '';
               let endtime = '';
               if (Month < 4) {
-                starttime = year + '-01-1 00:00:00';
-                endtime = year + '-03-31 23:59:59';
+                starttime = year + '-01-1 ';
+                endtime = year + '-03-31 ';
               } else if (Month < 7) {
-                starttime = year + '-04-1 00:00:00';
-                endtime = year + '-06-30 23:59:59';
+                starttime = year + '-04-1 ';
+                endtime = year + '-06-30 ';
               } else if (Month < 10) {
-                starttime = year + '-07-1 00:00:00';
-                endtime = year + '-09-30 23:59:59';
+                starttime = year + '-07-1 ';
+                endtime = year + '-09-30 ';
               } else {
-                starttime = year * 1 - 1 + '-10-1 00:00:00';
-                endtime = year * 1 - 1 + '-12-31 23:59:59';
+                starttime = year * 1 - 1 + '-10-1 ';
+                endtime = year * 1 - 1 + '-12-31 ';
+              }
+
+              if (!boo) {
+                starttime += '00:00:00';
+                endtime += '23:59:59';
               }
 
               start.setTime(new Date(starttime).getTime());
@@ -266,4 +279,3 @@ export default class DatePicker extends Vue {
     }
   }
 </script>
-

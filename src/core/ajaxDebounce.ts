@@ -1,3 +1,5 @@
+import { stringify } from 'querystring';
+
 // tslint:disable-next-line:no-var-requires
 const querystring = require('querystring');
 
@@ -21,7 +23,7 @@ const waiting: any = {};
  * @param {object} fetch ajax
  */
 const ajaxDebounce = function ajaxDebouncefn(fetch: any): any {
-  return ({ method = '', url = '', data = {}, options = {} }) => {
+  return ({ method = '', url = '', data = {}, options = {} }: {method: string; url: string; data: any; options: any}) => {
     const key = `${method}:${url}?${querystring.stringify(data)}`;
     if (execution[key] === AJAX_TYPE_PENDING) {
       return new Promise((resolve, reject) => {

@@ -1,4 +1,4 @@
-
+import Sequelize from './core/Sequelize';
 import ORM from './core/ORM';
 import EventBus from './core/event-bus';
 import validate from './utils/validate';
@@ -17,10 +17,16 @@ import PictureView from './components/PictureView.vue'; //
 import SelectPanel from './components/SelectPanel.vue'; //
 import TheBreadcrumb from './components/TheBreadcrumb.vue'; //
 import TheMenu from './components/TheMenu.vue'; //
-import FileUpload from './components/FileUpload.vue'; //
-import PictureUpload from './components/PictureUpload.vue'; //
 
-import {MixContentModal} from './components/mix/MixContentModal';
+import TableMix from './components/mixins/TableMix'; //
+import TableViewMix from './components/mixins/TableViewMix'; //
+
+import ModalLayout from './components/layout/ModalLayout.vue'; //
+
+import FileUpload from './components/Upload/FileUpload.vue'; // 文件上传组件
+import PictureUpload from './components/Upload/PictureUpload.vue'; // 图片上传组件
+
+import Screenfull from './components/Screenfull'; //
 
 import {
   jsonTree,
@@ -58,8 +64,8 @@ export {
   deepClone,
   firstLetterToUpperCase,
   formatDate,
+  arrayTransformObject,
   ContentModal,
-  MixContentModal,
   CollectText,
   BrowserInfo,
   DatePicker,
@@ -74,6 +80,11 @@ export {
   SelectPanel,
   TheBreadcrumb,
   TheMenu,
+  TableMix,
+  TableViewMix,
+  ModalLayout,
   FileUpload,
   PictureUpload,
+  Screenfull,
+  Sequelize,
 };

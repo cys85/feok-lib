@@ -37,7 +37,6 @@ export function replaceNullOrUndefined(obj: any): any {
  * @param {Object} params 参数
  * @returns 完整path
  * @example
- * import {compilePath} from @/util/assist
  * //  return '/user/123'
  * compilePath('/user/:id', { id: 123 })
  */
@@ -56,7 +55,6 @@ export function compilePath(path: string, params: object) {
  * @param {Array} validList 数组
  * @returns true or false
  * @example
- * import {oneOf} from @/util/assist
  * // return true
  * oneOf('no', ['yes', 'no'])
  * // return false
@@ -79,7 +77,6 @@ export function oneOf(
  * @param {*} valid 参数
  * @returns true or false
  * @example
- * import {isFunction} from @/util/assist
  * // return true
  * const funs = function () {}
  * isFunction(funs)
@@ -96,7 +93,6 @@ export function isFunction(valid: any): boolean {
  * @param {*} param 需验证的参数
  * @returns {Boolean}
  * @example
- * import {isString} from @/util/assist
  * // return true
  * isString('cys')
  * // return false
@@ -111,7 +107,6 @@ export function isString(param: any) {
  * @param {*} param 需验证的参数
  * @returns {Boolean}
  * @example
- * import {isNumber} from @/util/assist
  * // return true
  * isString(111)
  * // return false
@@ -126,7 +121,6 @@ export function isNumber(param: any): boolean {
  * @param {*} param 需验证的参数
  * @returns {Boolean}
  * @example
- * import {isUndefined} from @/util/assist
  * // return true
  * isUndefined(undefined)
  * // return false
@@ -141,7 +135,6 @@ export function isUndefined(param: any): boolean {
  * @param {*} param 需验证的参数
  * @returns {Boolean}
  * @example
- * import {isArray} from @/util/assist
  * // return true
  * isArray(['cys'])
  * // return false
@@ -156,7 +149,6 @@ export function isArray(param: any): boolean {
  * @param {object} param 需验证的参数
  * @returns {boolean}
  * @example
- * import {isObject} from @/util/assist
  * // return true
  * isObject({name: 'cys'})
  * // return false
@@ -171,7 +163,6 @@ export function isObject(param: object): boolean {
  * @param {*} obj 需要clone的对象
  * @returns 新的对象
  * @example
- * import {deepClone} from @/util/assist
  * const newObject = deepClone(superObject)
  */
 export function deepClone(obj: any): any {

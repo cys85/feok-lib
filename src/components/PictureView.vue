@@ -17,8 +17,20 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Emit, Watch } from 'vue-property-decorator';
-
-@Component
+import VueLazyload from 'vue-lazyload';
+Vue.use(VueLazyload, {
+  preLoad: 1.3,
+  error: require('../assets/images/error.png'),
+  loading: require('../assets/images/loading.gif'),
+  attempt: 1,
+});
+// import 'viewerjs/dist/viewer.css';
+// import Viewer from 'v-viewer/src/component.vue';
+@Component({
+  components: {
+    // Viewer,
+  },
+})
 export default class PictureView extends Vue {
   @Prop({ type: Number, default: 45 })
   public width!: number;
@@ -30,8 +42,7 @@ export default class PictureView extends Vue {
   public path!: string;
   @Prop({ type: Boolean })
   public leftDisplay!: boolean;
-  @Prop({ type: Number , default: 0})
-  public scollTop!: number;
+
 
   public showChildren: boolean = false;
   public popperPositionOfTop: boolean = true;
