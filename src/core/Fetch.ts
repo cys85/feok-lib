@@ -105,13 +105,14 @@ class FetchCreator implements FetchCreatorInterface {
       },
       (error: AxiosError): AxiosPromise => {
         if (process.env.NODE_ENV !== 'production') {
-          console.log('出错了', error.response);
+          console.error(error.response);
         } // for debug
         const res: any = error.response;
         return Promise.reject(
           JSON.stringify({
             status: res.status,
             statusText: res.statusText,
+            data: res.data
           }),
         );
       },

@@ -91,6 +91,7 @@ class ORM implements FeokLib.ORMInterface {
           module.res = {
             code: err.status,
             message: err.statusText,
+            data: err.data
           };
         }
         await self.next(module)();
