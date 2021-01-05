@@ -20,7 +20,7 @@
     "@types/echarts": "0.0.13",
     "@types/lodash": "^4.14.111",
     "async-validator": "^1.8.5",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "canvas-compress": "^1.1.5",
     "dayjs": "^1.6.10",
     "echarts": "^4.1.0",
